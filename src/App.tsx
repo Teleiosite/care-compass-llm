@@ -9,6 +9,8 @@ import RiskAssessment from "./pages/RiskAssessment";
 import Predictions from "./pages/Predictions";
 import TreatmentPlans from "./pages/TreatmentPlans";
 import SafetyAlerts from "./pages/SafetyAlerts";
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/predictions" element={<Predictions />} />
           <Route path="/treatment" element={<TreatmentPlans />} />
           <Route path="/safety" element={<SafetyAlerts />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
