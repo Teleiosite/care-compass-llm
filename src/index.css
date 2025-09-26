@@ -2,39 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Medical AI Dashboard Design System - Professional Healthcare Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core medical interface colors */
+    --background: 210 20% 98%;
+    --foreground: 210 15% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 15% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 15% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Medical brand colors - professional blues */
+    --primary: 210 90% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 85% 92%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Clinical secondary - medical teal */
+    --secondary: 180 25% 94%;
+    --secondary-foreground: 180 50% 25%;
+    --clinical-teal: 180 65% 40%;
+    --clinical-teal-light: 180 60% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 15% 96%;
+    --muted-foreground: 210 10% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 15% 94%;
+    --accent-foreground: 210 90% 45%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Risk level colors */
+    --risk-low: 120 60% 45%;
+    --risk-low-bg: 120 50% 95%;
+    --risk-medium: 45 90% 55%;
+    --risk-medium-bg: 45 80% 95%;
+    --risk-high: 0 75% 55%;
+    --risk-high-bg: 0 70% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 88%;
+    --input: 210 20% 96%;
+    --ring: 210 90% 45%;
+
+    /* Medical gradients */
+    --gradient-medical: linear-gradient(135deg, hsl(210 90% 45%), hsl(180 65% 40%));
+    --gradient-risk: linear-gradient(90deg, hsl(120 60% 45%), hsl(45 90% 55%), hsl(0 75% 55%));
+    --gradient-subtle: linear-gradient(180deg, hsl(210 20% 99%), hsl(210 15% 96%));
+
+    /* Medical shadows */
+    --shadow-medical: 0 4px 20px hsl(210 90% 45% / 0.15);
+    --shadow-card: 0 2px 10px hsl(210 20% 20% / 0.08);
+    --shadow-elevated: 0 8px 30px hsl(210 20% 20% / 0.12);
 
     --radius: 0.5rem;
 
