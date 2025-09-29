@@ -1,0 +1,173 @@
+2025-09-26 16:54:47.917 UTC [8023] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-26 16:54:47.920 UTC [8023] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-26 16:54:47.932 UTC [8023] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2025-09-26 16:54:47.940 UTC [8023] LOG:  database system is shut down
+2025-09-26 16:54:56.622 UTC [8096] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-26 16:54:56.622 UTC [8096] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-26 16:54:56.627 UTC [8096] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2025-09-26 16:54:56.634 UTC [8096] LOG:  database system is shut down
+2025-09-26 16:55:37.903 UTC [8281] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-26 16:55:37.903 UTC [8281] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-26 16:55:37.912 UTC [8281] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2025-09-26 16:55:37.928 UTC [8284] LOG:  database system was shut down at 2025-09-26 16:53:13 UTC
+2025-09-26 16:55:37.946 UTC [8281] LOG:  database system is ready to accept connections
+2025-09-26 16:55:42.187 UTC [8329] LOG:  invalid length of startup packet
+2025-09-26 16:55:42.203 UTC [8330] LOG:  invalid length of startup packet
+2025-09-26 16:55:57.114 UTC [8430] FATAL:  lock file "postmaster.pid" already exists
+2025-09-26 16:55:57.114 UTC [8430] HINT:  Is another postmaster (PID 8281) running in data directory "/home/user/care-compass-llm/.pgdata"?
+2025-09-26 16:56:21.407 UTC [8530] FATAL:  pre-existing shared memory block (key 134637, ID 6) is still in use
+2025-09-26 16:56:21.407 UTC [8530] HINT:  Terminate any old server processes associated with data directory "/home/user/care-compass-llm/.pgdata".
+2025-09-26 16:56:21.408 UTC [8530] LOG:  database system is shut down
+2025-09-26 16:56:38.003 UTC [8281] LOG:  could not open file "postmaster.pid": No such file or directory
+2025-09-26 16:56:38.004 UTC [8281] LOG:  performing immediate shutdown because data directory lock file is invalid
+2025-09-26 16:56:38.004 UTC [8281] LOG:  received immediate shutdown request
+2025-09-26 16:56:38.004 UTC [8281] LOG:  could not open file "postmaster.pid": No such file or directory
+2025-09-26 16:56:38.020 UTC [8281] LOG:  database system is shut down
+2025-09-26 16:57:19.146 UTC [8761] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-26 16:57:19.146 UTC [8761] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-26 16:57:19.151 UTC [8761] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2025-09-26 16:57:19.172 UTC [8764] LOG:  database system was interrupted; last known up at 2025-09-26 16:55:37 UTC
+2025-09-26 16:57:19.329 UTC [8764] LOG:  database system was not properly shut down; automatic recovery in progress
+2025-09-26 16:57:19.334 UTC [8764] LOG:  redo starts at 0/15610B8
+2025-09-26 16:57:19.334 UTC [8764] LOG:  invalid record length at 0/15610F0: wanted 24, got 0
+2025-09-26 16:57:19.334 UTC [8764] LOG:  redo done at 0/15610B8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2025-09-26 16:57:19.351 UTC [8762] LOG:  checkpoint starting: end-of-recovery immediate wait
+2025-09-26 16:57:19.377 UTC [8762] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.002 s, total=0.033 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2025-09-26 16:57:19.392 UTC [8761] LOG:  database system is ready to accept connections
+2025-09-28 21:58:20.731 UTC [7393] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 21:58:20.787 UTC [7393] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-28 21:58:20.795 UTC [7393] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2025-09-28 21:58:20.800 UTC [7393] LOG:  database system is shut down
+2025-09-28 21:59:22.215 GMT [7640] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 21:59:22.216 GMT [7640] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-09-28 21:59:22.216 GMT [7640] LOG:  listening on IPv6 address "::", port 5432
+2025-09-28 21:59:22.230 GMT [7640] LOG:  listening on Unix socket "/home/user/care-compass-llm/postgres_socket/.s.PGSQL.5432"
+2025-09-28 21:59:22.255 GMT [7644] LOG:  database system was shut down at 2025-09-28 21:58:20 GMT
+2025-09-28 21:59:22.280 GMT [7640] LOG:  database system is ready to accept connections
+2025-09-28 21:59:25.966 GMT [7667] LOG:  invalid length of startup packet
+2025-09-28 21:59:25.992 GMT [7668] LOG:  invalid length of startup packet
+2025-09-28 21:59:36.948 GMT [7717] FATAL:  lock file "postmaster.pid" already exists
+2025-09-28 21:59:36.948 GMT [7717] HINT:  Is another postmaster (PID 7640) running in data directory "/home/user/care-compass-llm/.pgdata"?
+2025-09-28 21:59:46.743 GMT [7640] LOG:  received fast shutdown request
+2025-09-28 21:59:46.751 GMT [7640] LOG:  aborting any active transactions
+2025-09-28 21:59:46.774 GMT [7640] LOG:  background worker "logical replication launcher" (PID 7649) exited with exit code 1
+2025-09-28 21:59:46.778 GMT [7642] LOG:  shutting down
+2025-09-28 21:59:46.786 GMT [7642] LOG:  checkpoint starting: shutdown immediate
+2025-09-28 21:59:46.816 GMT [7642] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.005 s, total=0.039 s; sync files=2, longest=0.004 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2025-09-28 21:59:46.836 GMT [7640] LOG:  database system is shut down
+2025-09-28 21:59:46.915 GMT [7766] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 21:59:46.915 GMT [7766] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-09-28 21:59:46.915 GMT [7766] LOG:  listening on IPv6 address "::", port 5432
+2025-09-28 21:59:46.929 GMT [7766] LOG:  listening on Unix socket "/home/user/care-compass-llm/postgres_socket/.s.PGSQL.5432"
+2025-09-28 21:59:46.949 GMT [7769] LOG:  database system was shut down at 2025-09-28 21:59:46 GMT
+2025-09-28 21:59:46.970 GMT [7766] LOG:  database system is ready to accept connections
+2025-09-28 21:59:48.050 GMT [7819] FATAL:  role "postgres" does not exist
+2025-09-28 22:00:20.753 GMT [7766] LOG:  received fast shutdown request
+2025-09-28 22:00:20.761 GMT [7766] LOG:  aborting any active transactions
+2025-09-28 22:00:20.770 GMT [7766] LOG:  background worker "logical replication launcher" (PID 7772) exited with exit code 1
+2025-09-28 22:00:20.777 GMT [7767] LOG:  shutting down
+2025-09-28 22:00:20.784 GMT [7767] LOG:  checkpoint starting: shutdown immediate
+2025-09-28 22:00:20.993 GMT [7767] LOG:  checkpoint complete: wrote 967 buffers (5.9%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.108 s, sync=0.080 s, total=0.217 s; sync files=324, longest=0.008 s, average=0.001 s; distance=4541 kB, estimate=4541 kB
+2025-09-28 22:00:21.018 GMT [7766] LOG:  database system is shut down
+2025-09-28 22:00:21.124 GMT [7943] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 22:00:21.124 GMT [7943] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-09-28 22:00:21.124 GMT [7943] LOG:  listening on IPv6 address "::", port 5432
+2025-09-28 22:00:21.137 GMT [7943] LOG:  listening on Unix socket "/home/user/care-compass-llm/postgres_socket/.s.PGSQL.5432"
+2025-09-28 22:00:21.155 GMT [7946] LOG:  database system was shut down at 2025-09-28 22:00:20 GMT
+2025-09-28 22:00:21.173 GMT [7943] LOG:  database system is ready to accept connections
+2025-09-28 22:00:21.224 GMT [7953] ERROR:  database "care_compass" already exists
+2025-09-28 22:00:21.224 GMT [7953] STATEMENT:  CREATE DATABASE care_compass;
+2025-09-28 22:00:36.357 GMT [8015] FATAL:  lock file "postmaster.pid" already exists
+2025-09-28 22:00:36.357 GMT [8015] HINT:  Is another postmaster (PID 7943) running in data directory "/home/user/care-compass-llm/.pgdata"?
+2025-09-28 22:01:19.276 GMT [7943] LOG:  received fast shutdown request
+2025-09-28 22:01:19.282 GMT [7943] LOG:  aborting any active transactions
+2025-09-28 22:01:19.298 GMT [7943] LOG:  background worker "logical replication launcher" (PID 7949) exited with exit code 1
+2025-09-28 22:01:19.304 GMT [7944] LOG:  shutting down
+2025-09-28 22:01:19.309 GMT [7944] LOG:  checkpoint starting: shutdown immediate
+2025-09-28 22:01:19.352 GMT [7944] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.017 s, sync=0.008 s, total=0.049 s; sync files=16, longest=0.004 s, average=0.001 s; distance=132 kB, estimate=132 kB
+2025-09-28 22:01:19.377 GMT [7943] LOG:  database system is shut down
+2025-09-28 22:01:19.539 GMT [8167] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 22:01:19.541 GMT [8167] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-09-28 22:01:19.541 GMT [8167] LOG:  listening on IPv6 address "::", port 5432
+2025-09-28 22:01:19.553 GMT [8167] LOG:  listening on Unix socket "/home/user/care-compass-llm/postgres_socket/.s.PGSQL.5432"
+2025-09-28 22:01:19.575 GMT [8170] LOG:  database system was shut down at 2025-09-28 22:01:19 GMT
+2025-09-28 22:01:19.598 GMT [8167] LOG:  database system is ready to accept connections
+2025-09-28 22:06:19.670 GMT [8168] LOG:  checkpoint starting: time
+2025-09-28 22:06:19.814 GMT [8168] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.109 s, sync=0.008 s, total=0.145 s; sync files=3, longest=0.005 s, average=0.003 s; distance=0 kB, estimate=0 kB
+2025-09-28 23:04:39.362 GMT [21058] FATAL:  database "dbname" does not exist
+2025-09-28 23:08:43.346 UTC [22683] LOG:  starting PostgreSQL 12.19 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 23:08:43.347 UTC [22683] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-09-28 23:08:43.347 UTC [22683] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-09-28 23:08:43.347 UTC [22683] WARNING:  could not create listen socket for "localhost"
+2025-09-28 23:08:43.347 UTC [22683] FATAL:  could not create any TCP/IP sockets
+2025-09-28 23:08:43.347 UTC [22683] LOG:  database system is shut down
+2025-09-28 23:10:41.685 UTC [23185] LOG:  starting PostgreSQL 12.19 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 23:10:41.686 UTC [23185] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-28 23:10:41.692 UTC [23185] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2025-09-28 23:10:41.692 UTC [23185] LOG:  database system is shut down
+2025-09-28 23:11:17.358 UTC [23332] LOG:  starting PostgreSQL 12.19 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-28 23:11:17.359 UTC [23332] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-28 23:11:17.365 UTC [23332] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2025-09-28 23:11:17.434 UTC [23333] LOG:  database system was shut down at 2025-09-28 23:08:13 UTC
+2025-09-28 23:11:17.472 UTC [23332] LOG:  database system is ready to accept connections
+2025-09-28 23:12:47.208 UTC [23869] ERROR:  database "dbname" already exists
+2025-09-28 23:12:47.208 UTC [23869] STATEMENT:  CREATE DATABASE dbname;
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 1
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 2
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 3
+2025-09-29 02:20:52.682 UTC [1578] FATAL:  database files are incompatible with server
+2025-09-29 02:20:52.682 UTC [1578] DETAIL:  The data directory was initialized by PostgreSQL version 12, which is not compatible with this version 15.7.
+2025-09-29 02:22:19.107 UTC [2038] FATAL:  database files are incompatible with server
+2025-09-29 02:22:19.107 UTC [2038] DETAIL:  The data directory was initialized by PostgreSQL version 12, which is not compatible with this version 15.7.
+2025-09-29 02:27:11.820 GMT [3107] FATAL:  database files are incompatible with server
+2025-09-29 02:27:11.820 GMT [3107] DETAIL:  The data directory was initialized by PostgreSQL version 15, which is not compatible with this version 12.19.
+2025-09-29 02:38:38.476 UTC [5786] LOG:  starting PostgreSQL 12.19 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-29 02:38:38.477 UTC [5786] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-29 02:38:38.487 UTC [5786] LOG:  listening on Unix socket "/home/user/care-compass-llm/postgres_socket/.s.PGSQL.5432"
+2025-09-29 02:38:38.525 UTC [5788] LOG:  database system was shut down at 2025-09-29 02:38:34 UTC
+2025-09-29 02:38:38.544 UTC [5786] LOG:  database system is ready to accept connections
+2025-09-29 02:38:42.115 UTC [5834] LOG:  invalid length of startup packet
+2025-09-29 02:38:42.136 UTC [5835] LOG:  invalid length of startup packet
+2025-09-29 08:25:35.734 UTC [6158] FATAL:  database files are incompatible with server
+2025-09-29 08:25:35.734 UTC [6158] DETAIL:  The data directory was initialized by PostgreSQL version 12, which is not compatible with this version 15.7.
+2025-09-29 08:27:42.935 UTC [6625] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-29 08:27:42.936 UTC [6625] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-29 08:27:42.949 UTC [6625] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2025-09-29 08:27:42.956 UTC [6625] LOG:  database system is shut down
+2025-09-29 08:28:26.504 UTC [6772] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2025-09-29 08:28:26.507 UTC [6772] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-09-29 08:28:26.514 UTC [6772] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2025-09-29 08:28:26.532 UTC [6775] LOG:  database system was shut down at 2025-09-29 08:27:24 UTC
+2025-09-29 08:28:26.554 UTC [6772] LOG:  database system is ready to accept connections
+2025-09-29 08:28:30.050 UTC [6792] LOG:  invalid length of startup packet
+2025-09-29 08:28:30.078 UTC [6793] LOG:  invalid length of startup packet
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 1
+2025-09-29 08:33:26.630 UTC [6773] LOG:  checkpoint starting: time
+2025-09-29 08:35:09.012 UTC [6773] LOG:  checkpoint complete: wrote 1024 buffers (6.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=102.332 s, sync=0.029 s, total=102.383 s; sync files=340, longest=0.004 s, average=0.001 s; distance=4746 kB, estimate=4746 kB
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 2
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 3
+2025-09-29 08:38:26.111 UTC [6773] LOG:  checkpoint starting: time
+2025-09-29 08:38:28.151 UTC [6773] LOG:  checkpoint complete: wrote 21 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.014 s, sync=0.005 s, total=2.040 s; sync files=21, longest=0.003 s, average=0.001 s; distance=4 kB, estimate=4272 kB
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 4
+INFO:root:Received patient data: {'age': 30, 'gender': 'male', 'weight': 70.0, 'height': 1.7, 'bmi': 24.2, 'diabetes_duration': None, 'complications': None, 'comorbidities': None, 'medications': [], 'hba1c': None, 'glucose': None, 'lipids': None, 'kidney_function': None, 'frailty_assessment': None, 'adl_independence': None}
+INFO:root:Successfully created patient with id: 5
+2025-09-29 08:51:11.156 UTC [12617] FATAL:  role "postgres" does not exist
+INFO:root:Received patient data: {'age': 30, 'gender': 'male', 'weight': 70.0, 'height': 1.7, 'bmi': 24.2, 'diabetes_duration': None, 'complications': None, 'comorbidities': None, 'medications': [], 'hba1c': None, 'glucose': None, 'lipids': None, 'kidney_function': None, 'frailty_assessment': None, 'adl_independence': None}
+INFO:root:Successfully created patient with id: 6
+2025-09-29 08:52:31.940 UTC [13158] FATAL:  role "postgres" does not exist
+2025-09-29 08:53:26.447 UTC [6773] LOG:  checkpoint starting: time
+2025-09-29 08:53:28.511 UTC [6773] LOG:  checkpoint complete: wrote 21 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.037 s, sync=0.007 s, total=2.065 s; sync files=21, longest=0.004 s, average=0.001 s; distance=6 kB, estimate=3845 kB
+INFO:root:Received patient data: {'age': 72, 'gender': 'female', 'weight': 68.5, 'height': 1.62, 'bmi': 26.2, 'diabetes_duration': 10, 'complications': 'neuropathy', 'comorbidities': 'hypertension', 'medications': [{'drug_name': 'Metformin', 'dosage': '500mg', 'frequency': 'bd'}], 'hba1c': 7.2, 'glucose': 140, 'lipids': 'LDL elevated', 'kidney_function': 'eGFR 55', 'frailty_assessment': 'mild', 'adl_independence': 'partial'}
+INFO:root:Successfully created patient with id: 7
+2025-09-29 08:58:26.521 UTC [6773] LOG:  checkpoint starting: time
+2025-09-29 08:58:28.675 UTC [6773] LOG:  checkpoint complete: wrote 22 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.125 s, sync=0.011 s, total=2.155 s; sync files=22, longest=0.007 s, average=0.001 s; distance=5 kB, estimate=3461 kB
+2025-09-29 08:59:32.894 UTC [15074] FATAL:  database "user" does not exist
+2025-09-29 09:08:26.879 UTC [6773] LOG:  checkpoint starting: time
+2025-09-29 09:10:03.420 UTC [6773] LOG:  checkpoint complete: wrote 963 buffers (5.9%); 1 WAL file(s) added, 0 removed, 0 recycled; write=96.390 s, sync=0.033 s, total=96.541 s; sync files=307, longest=0.004 s, average=0.001 s; distance=4467 kB, estimate=4467 kB

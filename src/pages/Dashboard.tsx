@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,59 +13,48 @@ import {
   Brain,
   Shield
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+// Define the Alert interface
+interface Alert {
+  id: number;
+  age: number;
+  gender: string;
+  alert_message: string;
+  severity: string;
+  created_at: string;
+}
+
+// Define the Risk Metric interface
+interface RiskMetric {
+  label: string;
+  value: string;
+  trend: string;
+  level: string;
+  patients: number;
+}
 
 export default function Dashboard() {
-  const riskMetrics = [
-    { 
-      label: "Cardiovascular Events", 
-      value: "12%", 
-      trend: "+2.1%", 
-      level: "medium",
-      patients: 34 
-    },
-    { 
-      label: "Hypoglycemia Risk", 
-      value: "8%", 
-      trend: "-1.2%", 
-      level: "low",
-      patients: 22 
-    },
-    { 
-      label: "Uncontrolled BP", 
-      value: "18%", 
-      trend: "+3.5%", 
-      level: "high",
-      patients: 51 
-    },
-    { 
-      label: "Polypharmacy Risk", 
-      value: "15%", 
-      trend: "+0.8%", 
-      level: "medium",
-      patients: 43 
-    },
-  ];
+  const [totalPatients, setTotalPatients] = useState(0);
+  const [recentAlerts, setRecentAlerts] = useState<Alert[]>([]);
+  const [riskMetrics, setRiskMetrics] = useState<RiskMetric[]>([]);
 
-  const recentAlerts = [
-    {
-      patient: "John D., 74",
-      alert: "Drug interaction detected: Metformin + ACE inhibitor",
-      severity: "high",
-      time: "2 min ago"
-    },
-    {
-      patient: "Mary S., 68",
-      alert: "Hypoglycemia risk increased due to recent medication change",
-      severity: "medium",
-      time: "15 min ago"
-    },
-    {
-      patient: "Robert K., 71",
-      alert: "Blood pressure target not met - consider treatment adjustment",
-      severity: "medium",
-      time: "1 hour ago"
-    }
-  ];
+  useEffect(() => {
+    // Fetch total patients
+    fetch("http://localhost:3000/api/patients")
+      .then((res) => res.json())
+      .then((data) => setTotalPatients(data.length));
+
+    // Fetch recent alerts
+    fetch("http://localhost:3000/api/alerts")
+      .then((res) => res.json())
+      .then((data) => setRecentAlerts(data));
+
+    // Fetch risk assessment
+    fetch("http://localhost:3000/api/risk-assessment")
+      .then((res) => res.json())
+      .then((data) => setRiskMetrics(data));
+  }, []);
 
   return (
     <DashboardLayout>
@@ -81,7 +71,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Patients</p>
-                <p className="text-3xl font-bold text-foreground">284</p>
+                <p className="text-3xl font-bold text-foreground">{totalPatients}</p>
                 <p className="text-sm text-clinical-teal">+12 this month</p>
               </div>
               <Users className="w-12 h-12 text-primary" />
@@ -92,7 +82,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Active Alerts</p>
-                <p className="text-3xl font-bold text-foreground">47</p>
+                <p className="text-3xl font-bold text-foreground">{recentAlerts.length}</p>
                 <p className="text-sm text-risk-high">Requires attention</p>
               </div>
               <AlertTriangle className="w-12 h-12 text-risk-high" />
@@ -167,10 +157,10 @@ export default function Dashboard() {
                 Recent Alerts
               </h3>
               <div className="space-y-4">
-                {recentAlerts.map((alert, index) => (
-                  <div key={index} className="p-3 rounded-lg border border-border">
+                {recentAlerts.map((alert) => (
+                  <div key={alert.id} className="p-3 rounded-lg border border-border">
                     <div className="flex items-start justify-between mb-2">
-                      <span className="font-medium text-sm">{alert.patient}</span>
+                      <span className="font-medium text-sm">{`Patient, ${alert.age}, ${alert.gender}`}</span>
                       <Badge 
                         variant={alert.severity === 'high' ? 'destructive' : 'secondary'}
                         className={
@@ -181,14 +171,16 @@ export default function Dashboard() {
                         {alert.severity.toUpperCase()}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">{alert.alert}</p>
-                    <p className="text-xs text-muted-foreground">{alert.time}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{alert.alert_message}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(alert.created_at).toLocaleString()}</p>
                   </div>
                 ))}
               </div>
-              <Button className="w-full mt-4" variant="outline">
-                View All Alerts
-              </Button>
+              <Link to="/alerts">
+                <Button className="w-full mt-4" variant="outline">
+                  View All Alerts
+                </Button>
+              </Link>
             </Card>
           </div>
         </div>
