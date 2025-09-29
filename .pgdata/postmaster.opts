@@ -1,1 +1,0 @@
-/nix/store/6rc8yg50mqgj9rzg6dy6swhm8phg53gm-postgresql-12.19/bin/postgres "-D" ".pgdata" "-k" "/home/user/care-compass-llm/postgres_socket" "-p" "5432"
