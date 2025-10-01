@@ -71,12 +71,12 @@ export default function Dashboard() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Clinical Dashboard</h1>
-          <p className="text-muted-foreground">AI-powered insights for elderly diabetes care</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Clinical Dashboard</h1>
+          <p className="text-sm md:text-base text-muted-foreground">AI-powered insights for elderly diabetes care</p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <Card className="p-6 shadow-card">
             <div className="flex items-center justify-between">
               <div>
@@ -123,14 +123,14 @@ export default function Dashboard() {
         </div>
 
         {/* Risk Assessment Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2">
             <Card className="p-6 shadow-card">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2 text-primary" />
+              <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center">
+                <TrendingUp className="w-4 h-4 md:w-5 md:h-5 mr-2 text-primary" />
                 Risk Assessment Overview
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {riskMetrics.map((metric, index) => (
                   <div key={index} className="p-4 rounded-lg border border-border">
                     <div className="flex items-center justify-between mb-2">
@@ -161,9 +161,9 @@ export default function Dashboard() {
           </div>
 
           <div>
-            <Card className="p-6 shadow-card">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <AlertTriangle className="w-5 h-5 mr-2 text-risk-high" />
+            <Card className="p-4 md:p-6 shadow-card">
+              <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center">
+                <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 mr-2 text-risk-high" />
                 Recent Alerts
               </h3>
               <div className="space-y-4">
@@ -194,24 +194,24 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Actions */}
-        <Card className="p-6 shadow-card">
-          <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Button className="h-20 flex flex-col space-y-2 bg-gradient-medical text-white">
-              <Heart className="w-6 h-6" />
-              <span>New Risk Assessment</span>
+        <Card className="p-4 md:p-6 shadow-card">
+          <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <Button className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 bg-gradient-medical text-white text-xs md:text-sm">
+              <Heart className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-center">New Risk Assessment</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2">
-              <Droplets className="w-6 h-6" />
-              <span>Blood Sugar Analysis</span>
+            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
+              <Droplets className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-center">Blood Sugar Analysis</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2">
-              <Activity className="w-6 h-6" />
-              <span>BP Monitoring</span>
+            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
+              <Activity className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-center">BP Monitoring</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2">
-              <Brain className="w-6 h-6" />
-              <span>ML Model Training</span>
+            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
+              <Brain className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-center">ML Model Training</span>
             </Button>
           </div>
         </Card>

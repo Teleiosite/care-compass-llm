@@ -83,18 +83,18 @@ export default function RiskAssessment() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Risk Assessment</h1>
-            <p className="text-muted-foreground">ML-powered risk prediction with explainable AI</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Risk Assessment</h1>
+            <p className="text-sm md:text-base text-muted-foreground">ML-powered risk prediction with explainable AI</p>
           </div>
-          <div className="flex space-x-3">
-            <Button variant="outline" className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto">
               <Eye className="w-4 h-4" />
               <span>SHAP Analysis</span>
             </Button>
-            <Button className="flex items-center space-x-2 bg-gradient-medical">
+            <Button className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto">
               <Brain className="w-4 h-4" />
               <span>Run New Assessment</span>
             </Button>
@@ -102,16 +102,16 @@ export default function RiskAssessment() {
         </div>
 
         {/* Risk Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {riskFactors.map((risk, index) => (
-            <Card key={index} className="p-6 shadow-card">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-primary-light">
-                    <risk.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-sm">{risk.category}</h3>
+          <Card key={index} className="p-4 md:p-6 shadow-card">
+            <div className="flex items-center justify-between mb-3 md:mb-4 flex-wrap gap-2">
+              <div className="flex items-center space-x-2 md:space-x-3">
+                <div className="p-1.5 md:p-2 rounded-lg bg-primary-light">
+                  <risk.icon className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-xs md:text-sm">{risk.category}</h3>
                     <Badge 
                       variant="secondary"
                       className={
@@ -144,18 +144,18 @@ export default function RiskAssessment() {
         </div>
 
         {/* Detailed Risk Factors */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {riskFactors.map((risk, index) => (
-            <Card key={index} className="p-6 shadow-card">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 rounded-lg bg-primary-light">
-                  <risk.icon className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">{risk.category}</h3>
-                  <p className="text-sm text-muted-foreground">Contributing Factors Analysis</p>
-                </div>
+          <Card key={index} className="p-4 md:p-6 shadow-card">
+            <div className="flex items-center space-x-2 md:space-x-3 mb-4 md:mb-6">
+              <div className="p-1.5 md:p-2 rounded-lg bg-primary-light">
+                <risk.icon className="w-4 h-4 md:w-5 md:h-5 text-primary" />
               </div>
+              <div>
+                <h3 className="text-base md:text-lg font-semibold">{risk.category}</h3>
+                <p className="text-xs md:text-sm text-muted-foreground">Contributing Factors Analysis</p>
+              </div>
+            </div>
 
               <div className="space-y-4">
                 {risk.factors.map((factor, factorIndex) => (
@@ -195,13 +195,13 @@ export default function RiskAssessment() {
         </div>
 
         {/* Clinical Recommendations */}
-        <Card className="p-6 shadow-card">
-          <h3 className="text-xl font-semibold mb-4 flex items-center">
-            <Target className="w-5 h-5 mr-2 text-primary" />
+        <Card className="p-4 md:p-6 shadow-card">
+          <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center">
+            <Target className="w-4 h-4 md:w-5 md:h-5 mr-2 text-primary" />
             Risk-Based Clinical Recommendations
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-4">
               <h4 className="font-semibold text-risk-high">High Priority Actions</h4>
               <div className="space-y-3">

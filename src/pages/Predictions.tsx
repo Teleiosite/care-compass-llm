@@ -68,22 +68,22 @@ export default function Predictions() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">ML Predictions</h1>
-            <p className="text-muted-foreground">Machine learning model outputs and interpretability</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">ML Predictions</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Machine learning model outputs and interpretability</p>
           </div>
-          <div className="flex space-x-3">
-            <Button variant="outline" className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto text-sm">
               <Download className="w-4 h-4" />
               <span>Export Results</span>
             </Button>
-            <Button variant="outline" className="flex items-center space-x-2">
+            <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto text-sm">
               <RefreshCw className="w-4 h-4" />
               <span>Retrain Models</span>
             </Button>
-            <Button className="flex items-center space-x-2 bg-gradient-medical">
+            <Button className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto text-sm">
               <Brain className="w-4 h-4" />
               <span>Run Prediction</span>
             </Button>
@@ -91,13 +91,13 @@ export default function Predictions() {
         </div>
 
         {/* Model Performance Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {modelPredictions.map((model, index) => (
-            <Card key={index} className="p-6 shadow-card">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-lg font-semibold">{model.model}</h3>
-                  <div className="flex items-center space-x-2 mt-1">
+          <Card key={index} className="p-4 md:p-6 shadow-card">
+            <div className="flex items-center justify-between mb-4 md:mb-6 flex-wrap gap-2">
+              <div>
+                <h3 className="text-base md:text-lg font-semibold">{model.model}</h3>
+                <div className="flex items-center space-x-2 mt-1 flex-wrap gap-1">
                     <Badge variant="secondary" className="bg-clinical-teal-light text-clinical-teal">
                       Accuracy: {model.accuracy}%
                     </Badge>
