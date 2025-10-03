@@ -6,6 +6,7 @@ import {
   Brain, 
   Shield, 
   User,
+  Users,
   BarChart3,
   Settings,
   X
@@ -16,7 +17,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: BarChart3 },
-  { title: "Patient Data", url: "/patient-data", icon: User },
+  { title: "Patient Data", url: "/patient-data", icon: Users },
+  { title: "Patient Profile", url: "/patient-profile", icon: User },
   { title: "Risk Assessment", url: "/risk-assessment", icon: Target },
   { title: "ML Predictions", url: "/predictions", icon: Brain },
   { title: "Treatment Plans", url: "/treatment", icon: FileText },
@@ -78,7 +80,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <nav className="p-3 md:p-4 space-y-1 overflow-y-auto h-[calc(100vh-80px)]">
           {navigationItems.map((item) => {
-            const isActive = location.pathname === item.url;
+            const isActive = location.pathname.startsWith(item.url) && (item.url !== '/' || location.pathname === '/');
             return (
               <NavLink
                 key={item.title}

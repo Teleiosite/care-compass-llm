@@ -11,48 +11,66 @@ import {
   Download,
   RefreshCw,
   Eye,
-  Lightbulb
+  Lightbulb,
+  Loader2
 } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { fetchModelPredictions, fetchFeatureImportance, runSinglePrediction, ModelPrediction, FeatureImportance, PredictionItem } from "@/lib/ml-models";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Predictions() {
-  const modelPredictions = [
-    {
-      model: "Random Forest Classifier",
-      accuracy: 94.2,
-      precision: 91.8,
-      recall: 96.1,
-      f1Score: 93.9,
-      predictions: [
-        { outcome: "Cardiovascular Event (30 days)", probability: 0.68, confidence: "High" },
-        { outcome: "Hypoglycemic Episode (7 days)", probability: 0.12, confidence: "Medium" },
-        { outcome: "Emergency Hospitalization (90 days)", probability: 0.34, confidence: "High" },
-        { outcome: "Medication Non-adherence", probability: 0.45, confidence: "Medium" }
-      ]
-    },
-    {
-      model: "Neural Network (Deep Learning)",
-      accuracy: 92.7,
-      precision: 90.3,
-      recall: 94.8,
-      f1Score: 92.5,
-      predictions: [
-        { outcome: "Cardiovascular Event (30 days)", probability: 0.71, confidence: "High" },
-        { outcome: "Hypoglycemic Episode (7 days)", probability: 0.09, confidence: "Low" },
-        { outcome: "Emergency Hospitalization (90 days)", probability: 0.38, confidence: "High" },
-        { outcome: "Medication Non-adherence", probability: 0.42, confidence: "Medium" }
-      ]
-    }
-  ];
+  const [modelPredictions, setModelPredictions] = useState<ModelPrediction[]>([]);
+  const [featureImportance, setFeatureImportance] = useState<FeatureImportance[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isPredicting, setIsPredicting] = useState(false);
+  const { toast } = useToast();
 
-  const featureImportance = [
-    { feature: "Age", importance: 0.23, description: "Patient age (74 years)" },
-    { feature: "HbA1c Level", importance: 0.19, description: "Current: 8.2% (target: <7%)" },
-    { feature: "Blood Pressure", importance: 0.17, description: "Systolic: 145 mmHg" },
-    { feature: "Medication Count", importance: 0.14, description: "Currently taking 8 medications" },
-    { feature: "Frailty Score", importance: 0.12, description: "Score: 3/5 (moderate frailty)" },
-    { feature: "Comorbidities", importance: 0.08, description: "Hypertension, metabolic syndrome" },
-    { feature: "BMI", importance: 0.07, description: "32.1 kg/m² (obese)" }
-  ];
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const [predictions, importance] = await Promise.all([
+          fetchModelPredictions(),
+          fetchFeatureImportance(),
+        ]);
+        setModelPredictions(predictions);
+        setFeatureImportance(importance);
+      } catch (error) {
+        console.error("Failed to load ML model data:", error);
+        // Optionally, set an error state here to show in the UI
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const handleRunPrediction = useCallback(async () => {
+    setIsPredicting(true);
+    try {
+      // In a real app, you'd get these features from the selected patient's data.
+      // Using random data that matches the dummy model's expected features (7 features).
+      const dummyFeatures = Array.from({ length: 7 }, () => Math.random());
+      const newPrediction = await runSinglePrediction(dummyFeatures);
+
+      // Update the UI with the new prediction.
+      // This is a simple update; a more robust solution might use a global state.
+      setModelPredictions(prev => prev.map(model => {
+        if (model.model === "Random Forest Classifier") {
+          // Replace the first prediction with the new one
+          const updatedPredictions: PredictionItem[] = [newPrediction, ...model.predictions.slice(1)];
+          return { ...model, predictions: updatedPredictions };
+        }
+        return model;
+      }));
+      toast({ title: "Prediction Successful", description: `New risk score for ${newPrediction.outcome} is ${(newPrediction.probability * 100).toFixed(1)}%` });
+    } catch (error) {
+      console.error("Failed to run prediction:", error);
+      toast({ title: "Prediction Failed", description: "Could not get a new prediction from the model.", variant: "destructive" });
+    } finally {
+      setIsPredicting(false);
+    }
+  }, [toast]);
 
   const getProbabilityColor = (prob: number) => {
     if (prob >= 0.6) return "text-risk-high";
@@ -65,6 +83,17 @@ export default function Predictions() {
     if (prob >= 0.3) return "bg-risk-medium-bg";
     return "bg-risk-low-bg";
   };
+  
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex h-full w-full items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <p className="ml-4 text-xl text-muted-foreground">Loading Model Predictions...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -83,9 +112,13 @@ export default function Predictions() {
               <RefreshCw className="w-4 h-4" />
               <span>Retrain Models</span>
             </Button>
-            <Button className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto text-sm">
-              <Brain className="w-4 h-4" />
-              <span>Run Prediction</span>
+            <Button onClick={handleRunPrediction} disabled={isPredicting} className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto text-sm">
+              {isPredicting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Brain className="w-4 h-4" />
+              )}
+              <span>{isPredicting ? "Running..." : "Run Prediction"}</span>
             </Button>
           </div>
         </div>

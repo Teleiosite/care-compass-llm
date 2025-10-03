@@ -13,6 +13,7 @@ import SafetyAlerts from "./pages/SafetyAlerts";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import PatientProfile from "./pages/PatientProfile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,14 +33,25 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            
+            {/* Patient Data Routes */}
             <Route path="/patient-data" element={<PatientData />} />
+            <Route path="/patient-data/:patientId" element={<PatientData />} />
+
+            {/* Patient Profile Routes */}
+            <Route path="/patient-profile" element={<PatientProfile />} />
+            <Route path="/patient-profile/:patientId" element={<PatientProfile />} />
+
+            {/* Other Application Routes */}
             <Route path="/risk-assessment" element={<RiskAssessment />} />
+            <Route path="/risk-assessment/:patientId" element={<RiskAssessment />} />
             <Route path="/predictions" element={<Predictions />} />
             <Route path="/treatment" element={<TreatmentPlans />} />
             <Route path="/safety" element={<SafetyAlerts />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* CATCH-ALL ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
