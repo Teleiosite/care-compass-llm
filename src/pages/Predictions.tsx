@@ -1,6 +1,8 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
@@ -14,13 +16,22 @@ import {
   Lightbulb,
   Loader2
 } from "lucide-react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { fetchModelPredictions, fetchFeatureImportance, runSinglePrediction, ModelPrediction, FeatureImportance, PredictionItem } from "@/lib/ml-models";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
+
+interface PatientListItem { id: number; name: string; }
+interface PatientProfile extends PatientListItem { age: number; gender: string; weight: number; height: number; diabetes_duration: number; htn_duration: number; vitals: { hba1c: number; creatinine: number; bp: string; egfr: number; } }
 
 export default function Predictions() {
   const [modelPredictions, setModelPredictions] = useState<ModelPrediction[]>([]);
   const [featureImportance, setFeatureImportance] = useState<FeatureImportance[]>([]);
+  const [patients, setPatients] = useState<PatientListItem[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState<string>('');
+  const [selectedPatient, setSelectedPatient] = useState<PatientProfile | null>(null);
+  const [isFetchingPatient, setIsFetchingPatient] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [isPredicting, setIsPredicting] = useState(false);
   const { toast } = useToast();
@@ -29,12 +40,14 @@ export default function Predictions() {
     const loadData = async () => {
       setLoading(true);
       try {
-        const [predictions, importance] = await Promise.all([
+        const [predictions, importance, patientList] = await Promise.all([
           fetchModelPredictions(),
           fetchFeatureImportance(),
+          supabase.from('patients').select('id, name').order('name'),
         ]);
         setModelPredictions(predictions);
         setFeatureImportance(importance);
+        setPatients(patientList.data || []);
       } catch (error) {
         console.error("Failed to load ML model data:", error);
         // Optionally, set an error state here to show in the UI
@@ -45,32 +58,89 @@ export default function Predictions() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    const fetchPatientProfile = async () => {
+      if (!selectedPatientId) {
+        setSelectedPatient(null);
+        return;
+      }
+      setIsFetchingPatient(true);
+      try {
+        const { data: patientData, error: patientError } = await supabase.from('patients').select('*').eq('id', selectedPatientId).single();
+        if (patientError) throw patientError;
+
+        const { data: vitalsData, error: vitalsError } = await supabase.from('vitals').select('*').eq('patient_id', selectedPatientId).single();
+        if (vitalsError && vitalsError.code !== 'PGRST116') throw vitalsError;
+
+        setSelectedPatient({ ...patientData, vitals: vitalsData });
+      } catch (error) {
+        toast({ title: "Failed to load patient profile", variant: "destructive" });
+        setSelectedPatient(null);
+      } finally {
+        setIsFetchingPatient(false);
+      }
+    };
+    fetchPatientProfile();
+  }, [selectedPatientId, toast]);
+
+  const patientFeatureVector = useMemo(() => {
+    if (!selectedPatient || !selectedPatient.vitals) return null;
+
+    const { age, gender, weight, height, diabetes_duration, htn_duration, vitals } = selectedPatient;
+    const { hba1c, creatinine, bp, egfr } = vitals;
+    const [sbp, dbp] = bp ? bp.replace(/\\s*mmHg/g, '').split('/').map(Number) : [0, 0];
+    const bmi = (weight && height) ? (weight / ((height / 100) ** 2)) : 0;
+
+    // The order MUST match the training script: `halo_pipeline_run.py`
+    return [
+      age || 0,
+      bmi || 0,
+      diabetes_duration || 0,
+      htn_duration || 0,
+      hba1c || 0,
+      creatinine || 0,
+      egfr || 0,
+      sbp || 0,
+      dbp || 0,
+      weight || 0,
+      gender === 'Male' ? 1 : 0,
+    ];
+  }, [selectedPatient]);
+
   const handleRunPrediction = useCallback(async () => {
+    if (!patientFeatureVector) {
+      toast({
+        title: "Cannot Run Prediction",
+        description: "Please select a patient with complete data first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsPredicting(true);
     try {
-      // In a real app, you'd get these features from the selected patient's data.
-      // Using random data that matches the dummy model's expected features (7 features).
-      const dummyFeatures = Array.from({ length: 7 }, () => Math.random());
-      const newPrediction = await runSinglePrediction(dummyFeatures);
+      const newPrediction = await runSinglePrediction(patientFeatureVector);
 
       // Update the UI with the new prediction.
-      // This is a simple update; a more robust solution might use a global state.
+      // We'll replace the first mock prediction with our new real one.
       setModelPredictions(prev => prev.map(model => {
         if (model.model === "Random Forest Classifier") {
-          // Replace the first prediction with the new one
-          const updatedPredictions: PredictionItem[] = [newPrediction, ...model.predictions.slice(1)];
+          const updatedPredictions: PredictionItem[] = [
+            { ...newPrediction, outcome: `${newPrediction.outcome} for ${selectedPatient?.name}` },
+             ...model.predictions.slice(1)
+          ];
           return { ...model, predictions: updatedPredictions };
         }
         return model;
       }));
-      toast({ title: "Prediction Successful", description: `New risk score for ${newPrediction.outcome} is ${(newPrediction.probability * 100).toFixed(1)}%` });
+      toast({ title: "Prediction Successful", description: `New risk score for ${selectedPatient?.name} is ${(newPrediction.probability * 100).toFixed(1)}%` });
     } catch (error) {
       console.error("Failed to run prediction:", error);
       toast({ title: "Prediction Failed", description: "Could not get a new prediction from the model.", variant: "destructive" });
     } finally {
       setIsPredicting(false);
     }
-  }, [toast]);
+  }, [patientFeatureVector, selectedPatient?.name, toast]);
 
   const getProbabilityColor = (prob: number) => {
     if (prob >= 0.6) return "text-risk-high";
@@ -108,12 +178,12 @@ export default function Predictions() {
               <Download className="w-4 h-4" />
               <span>Export Results</span>
             </Button>
-            <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto text-sm">
+            <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto text-sm" disabled>
               <RefreshCw className="w-4 h-4" />
               <span>Retrain Models</span>
             </Button>
-            <Button onClick={handleRunPrediction} disabled={isPredicting} className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto text-sm">
-              {isPredicting ? (
+            <Button onClick={handleRunPrediction} disabled={isPredicting || isFetchingPatient || !selectedPatientId} className="flex items-center justify-center space-x-2 bg-gradient-medical w-full sm:w-auto text-sm">
+              {isPredicting || isFetchingPatient ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <Brain className="w-4 h-4" />
@@ -122,6 +192,17 @@ export default function Predictions() {
             </Button>
           </div>
         </div>
+        
+        <Card className="p-4 md:p-6 shadow-card">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="patient-selector">Run New Prediction for Patient</Label>
+                    <Select onValueChange={setSelectedPatientId} value={selectedPatientId}><SelectTrigger id="patient-selector"><SelectValue placeholder="Select a patient..." /></SelectTrigger>
+                        <SelectContent>{patients.map(p => (<SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>))}</SelectContent>
+                    </Select>
+                </div>
+            </div>
+        </Card>
 
         {/* Model Performance Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">

@@ -36,11 +36,21 @@ interface Medication {
   patient_id: number;
 }
 
+interface Alert {
+  patientId: number;
+  patientName: string;
+  alert: string;
+  severity: 'high' | 'medium' | 'low';
+  time: string; // For simplicity, we'll use a static string
+}
+
 // --- Main Dashboard Component ---
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [totalPatients, setTotalPatients] = useState(0);
   const [riskMetrics, setRiskMetrics] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [safetyScore, setSafetyScore] = useState(0);
 
   useEffect(() => {
     const fetchDataAndCalculateRisks = async () => {
@@ -48,7 +58,7 @@ export default function Dashboard() {
 
       // --- 1. Fetch All Necessary Data ---
       const { data: patients, error: patientsError } = await supabase.from('patients').select('id, age, conditions, diabetes_type');
-      const { data: vitals, error: vitalsError } = await supabase.from('vitals').select('patient_id, bp, glucose, ldl');
+      const { data: vitals, error: vitalsError } = await supabase.from('vitals').select('patient_id, bp, glucose, ldl, hba1c');
       const { data: medications, error: medicationsError } = await supabase.from('medications').select('patient_id');
 
       if (patientsError || vitalsError || medicationsError) {
@@ -76,6 +86,7 @@ export default function Dashboard() {
       let polypharmacyCount = 0;
       let hypoglycemiaCount = 0;
       let cardioEventCount = 0;
+      const generatedAlerts: Alert[] = [];
 
       patients.forEach(p => {
         const pVitals = patientVitalsMap[p.id]?.[0]; // Assuming one vital entry per patient for simplicity
@@ -84,25 +95,37 @@ export default function Dashboard() {
         // Uncontrolled BP: Systolic > 140
         if (pVitals?.bp && parseInt(pVitals.bp.split('/')[0]) > 140) {
           uncontrolledBpCount++;
+          if (parseInt(pVitals.bp.split('/')[0]) > 160) {
+            generatedAlerts.push({ patientId: p.id, patientName: `Patient #${p.id}`, alert: `Severe HTN detected: ${pVitals.bp}`, severity: 'high', time: 'Just now' });
+          }
         }
 
         // Polypharmacy: 5 or more medications
         if (medCount >= 5) {
           polypharmacyCount++;
+          if (medCount > 8) {
+             generatedAlerts.push({ patientId: p.id, patientName: `Patient #${p.id}`, alert: `High medication burden (${medCount} drugs)`, severity: 'medium', time: 'Just now' });
+          }
         }
 
         // Hypoglycemia: Diabetic and fasting glucose < 70
-        if (p.diabetes_type && pVitals?.glucose < 70) {
+        if (p.diabetes_type && (pVitals?.glucose < 70 || pVitals?.hba1c > 9)) {
           hypoglycemiaCount++;
+          if (pVitals?.glucose < 60) {
+            generatedAlerts.push({ patientId: p.id, patientName: `Patient #${p.id}`, alert: `Low glucose detected: ${pVitals.glucose} mg/dL`, severity: 'high', time: 'Just now' });
+          }
         }
 
         // Cardiovascular Event Risk: Age > 55 and (LDL > 130 or is diabetic)
-        let cardioRiskFactors = 0;
-        if (p.age > 55) cardioRiskFactors++;
-        if (pVitals?.ldl > 130) cardioRiskFactors++;
-        if (p.diabetes_type) cardioRiskFactors++;
-        if (cardioRiskFactors >= 2) {
+        const hasHighLdl = pVitals?.ldl > 130;
+        const hasDiabetes = !!p.diabetes_type;
+        const isOlder = p.age > 65;
+
+        if (isOlder && (hasHighLdl || hasDiabetes)) {
           cardioEventCount++;
+          if (hasHighLdl && hasDiabetes) {
+             generatedAlerts.push({ patientId: p.id, patientName: `Patient #${p.id}`, alert: `Multiple CV risk factors (DM, LDL > 130)`, severity: 'medium', time: 'Just now' });
+          }
         }
       });
 
@@ -122,24 +145,26 @@ export default function Dashboard() {
         };
       };
 
-      setRiskMetrics([
+      const metrics = [
         createMetric("Cardiovascular Events", cardioEventCount, patients.length),
         createMetric("Hypoglycemia Risk", hypoglycemiaCount, patients.length),
         createMetric("Uncontrolled BP", uncontrolledBpCount, patients.length),
         createMetric("Polypharmacy Risk", polypharmacyCount, patients.length)
-      ]);
+      ];
+      setRiskMetrics(metrics);
+
+      // --- 5. Set Derived UI State ---
+      setAlerts(generatedAlerts.sort((a, b) => (a.severity === 'high' ? -1 : 1))); // High severity first
+
+      const totalRiskPercentage = metrics.reduce((sum, m) => sum + parseFloat(m.value), 0);
+      const averageRisk = totalRiskPercentage / (metrics.length || 1);
+      setSafetyScore(Math.max(0, Math.round(100 - averageRisk)));
 
       setLoading(false);
     };
 
     fetchDataAndCalculateRisks();
   }, []);
-
-  const recentAlerts = [
-    { patient: "John D., 74", alert: "Drug interaction detected: Metformin + ACE inhibitor", severity: "high", time: "2 min ago" },
-    { patient: "Mary S., 68", alert: "Hypoglycemia risk increased due to recent medication change", severity: "medium", time: "15 min ago" },
-    { patient: "Robert K., 71", alert: "Blood pressure target not met - consider treatment adjustment", severity: "medium", time: "1 hour ago" }
-  ];
 
   // --- Render Logic ---
   if (loading) {
@@ -169,22 +194,11 @@ export default function Dashboard() {
           <Card className="p-6 shadow-card">
              <div className="flex items-center justify-between">
                <div>
-                 <p className="text-sm text-muted-foreground">Active Alerts</p>
-                 <p className="text-3xl font-bold text-foreground">47</p>
-                 <p className="text-sm text-risk-high">Requires attention</p>
+                 <p className="text-sm text-muted-foreground">High-Risk Alerts</p>
+                 <p className="text-3xl font-bold text-foreground">{alerts.length}</p>
+                 <p className={`text-sm ${alerts.length > 0 ? 'text-risk-high' : 'text-risk-low'}`}>{alerts.length > 0 ? "Requires attention" : "All clear"}</p>
                </div>
                <AlertTriangle className="w-12 h-12 text-risk-high" />
-             </div>
-           </Card>
-
-          <Card className="p-6 shadow-card">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-sm text-muted-foreground">ML Predictions</p>
-                 <p className="text-3xl font-bold text-foreground">1,247</p>
-                 <p className="text-sm text-clinical-teal">94.2% accuracy</p>
-               </div>
-               <Brain className="w-12 h-12 text-clinical-teal" />
              </div>
            </Card>
 
@@ -243,10 +257,10 @@ export default function Dashboard() {
                 Recent Alerts
               </h3>
               <div className="space-y-4">
-                {recentAlerts.map((alert, index) => (
+                {alerts.slice(0, 3).map((alert, index) => (
                   <div key={index} className="p-3 rounded-lg border border-border">
                     <div className="flex items-start justify-between mb-2">
-                      <span className="font-medium text-sm">{alert.patient}</span>
+                      <span className="font-medium text-sm">{alert.patientName}</span>
                       <Badge 
                         variant={alert.severity === 'high' ? 'destructive' : 'secondary'}
                         className={`
@@ -261,35 +275,15 @@ export default function Dashboard() {
                     <p className="text-xs text-muted-foreground">{alert.time}</p>
                   </div>
                 ))}
+                {alerts.length === 0 && <p className="text-sm text-center text-muted-foreground py-4">No high-risk alerts found.</p>}
               </div>
-              <Button className="w-full mt-4" variant="outline">
-                View All Alerts
-              </Button>
+              {alerts.length > 0 && (
+                <Button className="w-full mt-4" variant="outline">View All Alerts</Button>
+              )}
             </Card>
           </div>
         </div>
 
-        <Card className="p-4 md:p-6 shadow-card">
-          <h3 className="text-lg md:text-xl font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            <Button className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 bg-gradient-medical text-white text-xs md:text-sm">
-              <Heart className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-center">New Risk Assessment</span>
-            </Button>
-            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
-              <Droplets className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-center">Blood Sugar Analysis</span>
-            </Button>
-            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
-              <Activity className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-center">BP Monitoring</span>
-            </Button>
-            <Button variant="outline" className="h-16 md:h-20 flex flex-col space-y-1 md:space-y-2 text-xs md:text-sm">
-              <Brain className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-center">ML Model Training</span>
-            </Button>
-          </div>
-        </Card>
       </div>
     </DashboardLayout>
   );

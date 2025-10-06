@@ -12,7 +12,7 @@ app = FastAPI()
 # In a production environment, you might load multiple models or use a model registry.
 # This model is trained by halo_pipeline_run.py to predict 6-month hypoglycemia risk.
 try:
-    # Use the new, more powerful model
+    # Load the model trained by the pipeline
     model_hypo_risk = joblib.load('hypo_risk_rf_model.joblib')
 except FileNotFoundError:
     print("WARNING: Model file not found. API will use mock data.")
@@ -108,32 +108,37 @@ async def run_prediction(request: PredictionRequest):
         # Fallback to mock data if model isn't loaded
         return {"outcome": "Hypoglycemic Episode (6 months)", "probability": 0.75, "confidence": "High"}
 
-    # The model was trained on a specific set of features in a specific order.
-    # In a real app, you would fetch the patient's data and construct this feature vector.
-    # For now, we'll use a sample vector that matches the training data structure.
-    # The order is defined in `hypo_risk_model_features.csv` from the pipeline.
-    # ['age_at_index', 'bmi', 'dm_duration_years', 'htn_duration_years', 'insulin_flag', 'med_count', 
-    # 'hba1c_T0', 'creatinine_T0', 'eGFR_T0', 'ldl_T0', 'hdl_T0', 'trig_T0', 'acr_T0', 'sbp_T0', 
-    # 'dbp_T0', 'weight_kg_T0', 'sex_M']
-    sample_features = [74, 28.1, 12, 15, 1, 8, 8.2, 1.1, 55.0, 130, 40, 150, 35, 145, 88, 85.0, 1]
-    
+    # The model expects features in a specific order, as defined by the training pipeline.
+    # The frontend must construct this feature vector correctly.
+    # New feature order from halo_pipeline_run.py:
+    # ['age_at_index', 'bmi', 'dm_duration_years', 'htn_duration_years', 
+    #  'hba1c_T0', 'creatinine_T0', 'eGFR_T0', 'sbp_T0', 'dbp_T0', 
+    #  'weight_kg_T0', 'sex_M']
+    patient_features = request.patient_features
+
     # Scikit-learn expects a 2D array for prediction
-    features = np.array(sample_features).reshape(1, -1)
+    features = np.array(patient_features).reshape(1, -1)
     
     # Get prediction probability
     # predict_proba returns probabilities for each class, e.g., [[P(class_0), P(class_1)]]
-    # We'll assume class 1 is the "event" we're predicting.
-    probability = model_hypo_risk.predict_proba(features)[0][1]
+    probabilities = model_hypo_risk.predict_proba(features)[0]
+    probability_of_event = probabilities[1] # Assuming class 1 is the "event"
 
     confidence = "Low"
-    if probability > 0.7:
+    if probability_of_event > 0.7:
         confidence = "High"
-    elif probability > 0.4:
+    elif probability_of_event > 0.4:
         confidence = "Medium"
 
+    # Determine outcome based on which probability is higher
+    if probability_of_event > 0.5:
+        outcome_text = "Hypoglycemic Episode (6 months)"
+    else:
+        outcome_text = "No Hypoglycemic Event Expected (6 months)"
+
     return {
-        "outcome": "Hypoglycemic Episode (6 months)",
-        "probability": round(probability, 2),
+        "outcome": outcome_text,
+        "probability": round(probability_of_event, 2),
         "confidence": confidence
     }
 

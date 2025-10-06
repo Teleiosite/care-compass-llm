@@ -155,13 +155,26 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
-feat_cols = [c for c in df_stack.columns if c not in ['patient_id','timepoint','hypo_next6m','cv_next6m','sex']]
-if 'sex' in df_stack.columns:
-    df_stack['sex_M'] = (df_stack['sex']=='M').astype(int); feat_cols.append('sex_M')
-X = df_stack[feat_cols].fillna(df_stack[feat_cols].median()); y = df_stack['hypo_next6m']
+# --- Feature Engineering for the UI-aligned model ---
+# We will use the T0 data from the MICE-imputed dataset (df2)
+# This aligns with the data captured in PatientData.tsx
 
-skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+df_model = df2.copy()
+
+# Define features based on PatientData.tsx fields
+feat_cols = [
+    'age_at_index', 'bmi', 'dm_duration_years', 'htn_duration_years',
+    'hba1c_T0', 'creatinine_T0', 'eGFR_T0', 'sbp_T0', 'dbp_T0', 'weight_kg_T0'
+]
+df_model['sex_M'] = (df_model['sex'] == 'M').astype(int)
+feat_cols.append('sex_M')
+
+X = df_model[feat_cols].fillna(df_model[feat_cols].median())
+y = df_model['event_hypo_T1'] # Predict hypoglycemia in the next period (T1)
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42) # Use for cross-validation
 mean_fpr = np.linspace(0,1,100); tprs=[]; aucs=[]; all_probs=[]; all_y=[]
 has_smote=False
 try:
@@ -196,7 +209,7 @@ plt.tight_layout(); plt.savefig(out_dir/'halo_calibration.png'); plt.close()
 # ---------- SHAP attempt ----------
 shap_note = ''
 try:
-    import shap
+    import shap # type: ignore
     final_clf = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
     if has_smote and y.nunique()>1 and y.mean()<0.4:
         sm = SMOTE(random_state=42); Xr,yr = sm.fit_resample(X,y); final_clf.fit(Xr,yr)

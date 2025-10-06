@@ -89,7 +89,7 @@ export default function PatientData() {
 
   // Form state
   const [demographics, setDemographics] = useState({ name: "", age: "", gender: "", weight: "", height: "", mrn: "" });
-  const [clinicalHistory, setClinicalHistory] = useState({ diabetes_duration: "", diabetes_type: "", conditions: [] as string[], medical_history: "", family_history: "" });
+  const [clinicalHistory, setClinicalHistory] = useState({ diabetes_duration: "", htn_duration: "", diabetes_type: "", conditions: [] as string[], medical_history: "", family_history: "" });
   const [labs, setLabs] = useState({ hba1c: "", glucose: "", bp_systolic: "", bp_diastolic: "", creatinine: "" });
   const [functionalStatus, setFunctionalStatus] = useState({ frailty_score: "", mobility_assessment: "", adl_assessment: "", cognitive_status: "", social_support: "" });
   
@@ -119,7 +119,7 @@ export default function PatientData() {
       const { data: vitals } = await supabase.from('vitals').select('*').eq('patient_id', patientId).single();
 
       setDemographics({ name: patient.name || '', age: String(patient.age || ''), gender: patient.gender || '', weight: String(patient.weight || ''), height: String(patient.height || ''), mrn: patient.mrn });
-      setClinicalHistory({ diabetes_duration: String(patient.diabetes_duration || ''), diabetes_type: patient.diabetes_type || '', conditions: patient.conditions || [], medical_history: patient.medical_history || '', family_history: patient.family_history || '' });
+      setClinicalHistory({ diabetes_duration: String(patient.diabetes_duration || ''), htn_duration: String(patient.htn_duration || ''), diabetes_type: patient.diabetes_type || '', conditions: patient.conditions || [], medical_history: patient.medical_history || '', family_history: patient.family_history || '' });
       setFunctionalStatus({ 
         frailty_score: String(patient.frailty_score || ''),
         mobility_assessment: patient.mobility_assessment || '',
@@ -219,6 +219,7 @@ export default function PatientData() {
       height: Number(demographics.height) || null,
       diabetes_type: clinicalHistory.diabetes_type,
       diabetes_duration: Number(clinicalHistory.diabetes_duration) || null,
+      htn_duration: Number(clinicalHistory.htn_duration) || null,
       conditions: clinicalHistory.conditions,
       medical_history: clinicalHistory.medical_history,
       family_history: clinicalHistory.family_history,
@@ -314,7 +315,8 @@ export default function PatientData() {
             <Card className="p-4 md:p-6 shadow-card">
               <h3 className="text-lg font-semibold mb-4">Clinical History</h3>
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2"><Label>Hypertension Duration (years)</Label><Input type="number" value={clinicalHistory.htn_duration} onChange={(e) => handleInputChange(setClinicalHistory, "htn_duration", e.target.value)} /></div>
                   <div className="space-y-2"><Label>Diabetes Duration (years)</Label><Input type="number" value={clinicalHistory.diabetes_duration} onChange={(e) => handleInputChange(setClinicalHistory, "diabetes_duration", e.target.value)} /></div>
                   <div className="space-y-2"><Label>Diabetes Type</Label><Select value={clinicalHistory.diabetes_type} onValueChange={(v) => handleInputChange(setClinicalHistory, "diabetes_type", v)}><SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger><SelectContent><SelectItem value="Type 1">Type 1</SelectItem><SelectItem value="Type 2">Type 2</SelectItem><SelectItem value="Gestational">Gestational</SelectItem><SelectItem value="None">None</SelectItem></SelectContent></Select></div>
                 </div>
@@ -372,6 +374,7 @@ export default function PatientData() {
           )}
 
           {activeTab === "risk" && <RiskDisplayCard scores={riskScores} />}
+
         </>
         )}
       </div>
